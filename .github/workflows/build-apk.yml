@@ -1,0 +1,102 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+      - 'claude/**'
+  workflow_dispatch:
+  release:
+    types: [created]
+
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      - name: Build PWA
+        run: npm run build
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-34 build-tools;34.0.0'
+
+      - name: Sync Capacitor to Android project
+        run: npx cap sync android
+
+      - name: Regenerate branded Android icons
+        run: npx tsx scripts/build-android-icons.ts
+
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew --no-daemon assembleDebug
+
+      - name: Rename APK with commit SHA
+        id: rename
+        run: |
+          APK_IN=android/app/build/outputs/apk/debug/app-debug.apk
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          APK_OUT=bhashya-parayana-${SHORT_SHA}.apk
+          cp "$APK_IN" "$APK_OUT"
+          echo "apk=$APK_OUT" >> "$GITHUB_OUTPUT"
+          echo "sha=$SHORT_SHA" >> "$GITHUB_OUTPUT"
+          ls -lh "$APK_OUT"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bhashya-parayana-debug-apk
+          path: ${{ steps.rename.outputs.apk }}
+          retention-days: 90
+          if-no-files-found: error
+
+      # When triggered by a GitHub Release, attach the APK to it so end-users
+      # can download a signed artifact directly from the release page.
+      - name: Attach APK to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.rename.outputs.apk }}
+
+      - name: Summary
+        run: |
+          {
+            echo "## APK built"
+            echo ""
+            echo "**Commit:** \`${{ steps.rename.outputs.sha }}\`"
+            echo "**Artifact:** \`${{ steps.rename.outputs.apk }}\`"
+            echo ""
+            echo "Install on Android:"
+            echo "1. Download the APK from the workflow artifacts (above)."
+            echo "2. On your phone, enable *Install unknown apps* for your browser."
+            echo "3. Open the APK and tap install."
+            echo ""
+            echo "This is a **debug-signed** build intended for sideload and testing."
+            echo "For Play Store distribution, follow the release-signing instructions"
+            echo "in \`docs/apk.md\`."
+          } >> "$GITHUB_STEP_SUMMARY"

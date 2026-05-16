@@ -35,11 +35,6 @@ public/data/panini/
 # results here. The fused output goes into data-source/meanings/.
 tmp/
 
-# GitHub Actions workflows — temporarily untracked because the PAT used
-# for the initial push lacked `workflow` scope. To re-add: remove these
-# two lines, then `git add .github/workflows/` and commit.
-.github/workflows/
-
 # iOS build output
 ios/App/build/
 ios/App/Pods/

@@ -1,0 +1,83 @@
+name: Deploy to GitHub Pages
+
+# Builds the PWA with the project's GitHub Pages base path and publishes
+# `dist/` to the github-pages environment. After this workflow runs once,
+# enable Pages in repo Settings → Pages → Source = "GitHub Actions"
+# (one-time, one-click). The site will be served at:
+#
+#   https://<owner>.github.io/<repo>/
+#
+# A custom domain can be added by dropping a `public/CNAME` file with
+# the domain on a single line; Pages picks it up automatically.
+
+on:
+  push:
+    branches:
+      - main
+      - 'claude/**'
+  workflow_dispatch:
+
+# Only one Pages deploy in flight at a time per ref.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compute base path from repo name
+        id: base
+        run: |
+          # Project pages live at /<repo>/. Owner pages (named
+          # <user>.github.io) serve from /. We detect both.
+          REPO="${GITHUB_REPOSITORY##*/}"
+          OWNER="${GITHUB_REPOSITORY%%/*}"
+          if [ "${REPO,,}" = "${OWNER,,}.github.io" ]; then
+            echo "base=/" >> "$GITHUB_OUTPUT"
+          else
+            echo "base=/${REPO}/" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build PWA with base path ${{ steps.base.outputs.base }}
+        env:
+          PUBLIC_BASE: ${{ steps.base.outputs.base }}
+        run: npm run build
+
+      # GitHub Pages serves from `dist/`. We add a SPA fallback so any
+      # unknown path inside the base falls through to index.html — even
+      # though the app uses HashRouter (so this is mostly belt-and-braces).
+      - name: SPA fallback
+        run: cp dist/index.html dist/404.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

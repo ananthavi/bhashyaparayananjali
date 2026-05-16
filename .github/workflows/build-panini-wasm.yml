@@ -1,0 +1,84 @@
+name: Build panini-wasm
+
+# Compiles `panini-wasm/` to WebAssembly via wasm-pack and uploads the
+# resulting bundle (`panini_wasm.js` + `panini_wasm_bg.wasm`) as a
+# workflow artifact. The release-build workflows (APK/IPA/Pages) can
+# download that artifact and drop it into `public/data/panini/` before
+# their own build steps.
+#
+# The current crate is a stub — see `panini-wasm/README.md`. This
+# workflow exists to validate the build pipeline (Rust toolchain
+# install + cache + wasm-pack invocation + artifact upload) before
+# the actual Vidyut wiring lands; once Vidyut is added the same
+# workflow rebuilds with the heavier data dependency without
+# structural change.
+
+on:
+  push:
+    paths:
+      - 'panini-wasm/**'
+      - '.github/workflows/build-panini-wasm.yml'
+  pull_request:
+    paths:
+      - 'panini-wasm/**'
+      - '.github/workflows/build-panini-wasm.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            panini-wasm/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('panini-wasm/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Install wasm-pack
+        run: |
+          if ! command -v wasm-pack >/dev/null 2>&1; then
+            cargo install wasm-pack --version "^0.13" --locked
+          fi
+
+      - name: Build
+        working-directory: panini-wasm
+        run: wasm-pack build --target web --release --out-dir ../public/data/panini
+
+      - name: Show artifact sizes
+        run: |
+          ls -la public/data/panini/
+          du -h public/data/panini/*.wasm || true
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install JS deps
+        run: npm ci --no-audit --no-fund --ignore-scripts
+
+      - name: Smoke-test the WASM
+        run: npm run smoke:vidyut
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: panini-wasm
+          path: public/data/panini/
+          if-no-files-found: error
+          retention-days: 30
