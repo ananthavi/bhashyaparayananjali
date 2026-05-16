@@ -1,0 +1,400 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --bg: #fbf5ec;
+  --surface: #ffffff;
+  --surface-2: #f3e8d3;
+  --ink: #2d1406;
+  --ink-2: #4a230b;
+  --muted: #8a6a2c;
+  --accent: #6b3410;
+  --rule: rgba(107, 52, 16, 0.18);
+}
+
+[data-theme='sepia'] {
+  --bg: #f1e4c4;
+  --surface: #faf0d8;
+  --surface-2: #ecdcb5;
+  --ink: #3a1e08;
+  --ink-2: #5a2f12;
+  --muted: #8a6a2c;
+  --accent: #6b3410;
+  --rule: rgba(107, 52, 16, 0.28);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #14100b;
+  --surface: #1b1610;
+  --surface-2: #241d14;
+  --ink: #f3e8d3;
+  --ink-2: #e8d4ad;
+  --muted: #b8944a;
+  --accent: #e8d4ad;
+  --rule: rgba(232, 212, 173, 0.16);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: contain;
+}
+
+.sa-text {
+  font-family: 'Noto Serif Devanagari', 'Noto Sans Devanagari', serif;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: none;
+}
+
+.ml-text {
+  font-family: Manjari, 'Noto Sans Malayalam', serif;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: none;
+}
+
+.iast-text {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-style: italic;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+/*
+ * Per-script font stacks. Each primary is the best-rated Google Fonts choice
+ * for long-form Sanskrit reading in that script; fallbacks preserve legibility
+ * if the primary fails to load.
+ */
+/*
+ * Indic compounds (samāsas) have no word-level break opportunities — a single
+ * samasta-pada can easily run 40+ characters. Without `overflow-wrap: anywhere`
+ * the browser treats each run as one word and overflows the viewport on
+ * narrow screens. Applying it globally on every script class lets the line
+ * break at any akṣara boundary, which is natural for chanting anyway.
+ */
+[class*='script-'] {
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: none;
+}
+
+.script-devanagari {
+  font-family: 'Noto Serif Devanagari', 'Tiro Devanagari Sanskrit', 'Noto Sans Devanagari',
+    serif;
+  font-feature-settings: 'calt' on, 'liga' on;
+}
+.script-malayalam {
+  /* Manjari is the canonical modern Malayalam serif (SMC). */
+  font-family: Manjari, 'Noto Sans Malayalam', serif;
+}
+.script-tamil {
+  font-family: 'Noto Serif Tamil', 'Tiro Tamil', serif;
+}
+.script-telugu {
+  font-family: 'Noto Serif Telugu', Ramaraja, serif;
+}
+.script-kannada {
+  font-family: 'Noto Serif Kannada', Gubbi, serif;
+}
+.script-bengali {
+  font-family: 'Noto Serif Bengali', 'Hind Siliguri', serif;
+}
+.script-gurmukhi {
+  font-family: 'Noto Sans Gurmukhi', sans-serif;
+}
+.script-gujarati {
+  font-family: 'Noto Serif Gujarati', 'Hind Vadodara', serif;
+}
+.script-oriya {
+  font-family: 'Noto Sans Oriya', sans-serif;
+}
+.script-grantha {
+  /* Grantha has no dedicated Google Font; Noto Serif renders most combining
+     marks and Tiro Tamil handles the Tamil-adjacent ligatures. */
+  font-family: 'Noto Serif', 'Tiro Tamil', serif;
+}
+.script-iast,
+.script-itrans,
+.script-hk {
+  font-family: 'Noto Serif', Georgia, serif;
+}
+
+.surface {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+
+.surface-2 {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+.btn:hover {
+  background: var(--surface-2);
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+.btn-primary:hover {
+  filter: brightness(1.08);
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid transparent;
+}
+.btn-ghost:hover {
+  background: var(--surface-2);
+}
+
+.chip {
+  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium;
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.rule {
+  border-top: 1px solid var(--rule);
+}
+
+.mantra-emphasis {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.bhashya-para {
+  white-space: pre-wrap;
+}
+
+/* -------- mantra / vyākhyāna cards -------- */
+
+.mantra-card {
+  position: relative;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface) 92%, var(--accent) 4%);
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 2px rgba(107, 52, 16, 0.06), 0 4px 14px rgba(107, 52, 16, 0.06);
+}
+.mantra-card::before,
+.mantra-card::after {
+  content: '';
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--rule), transparent);
+}
+.mantra-card::before {
+  top: 6px;
+}
+.mantra-card::after {
+  bottom: 6px;
+}
+
+.vyakhyana-card {
+  position: relative;
+  padding: 0.9rem 1rem 0.9rem 1.1rem;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-left: 3px solid color-mix(in srgb, var(--accent) 65%, transparent);
+}
+
+.vyakhyana-card.vyakhyana-leading {
+  font-style: italic;
+  background: color-mix(in srgb, var(--surface) 80%, var(--surface-2) 20%);
+  opacity: 0.92;
+}
+
+.vyakhyana-card.vyakhyana-aux {
+  background: color-mix(in srgb, var(--surface) 92%, var(--surface-2));
+}
+
+.vyakhyana-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+  font-family: 'Noto Serif Devanagari', serif;
+  letter-spacing: 0;
+}
+
+.aux-shloka-card {
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  text-align: center;
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  border: 1px dashed var(--rule);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* -------- bold quoted ślokas + reference chip inside bhāṣya -------- */
+
+.quoted-sloka {
+  font-weight: 600;
+  color: var(--accent);
+}
+.quoted-sloka-body {
+  font-weight: 600;
+}
+.quoted-ref {
+  display: inline-block;
+  margin-left: 0.4em;
+  padding: 0 0.45em;
+  font-size: 0.78em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border-radius: 9999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  vertical-align: 0.06em;
+}
+
+/* -------- voice-follow active highlight -------- */
+
+.voice-active .mantra-card {
+  border-color: color-mix(in srgb, var(--accent) 65%, transparent);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent),
+    0 8px 24px rgba(107, 52, 16, 0.12);
+  animation: voice-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes voice-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent), 0 8px 24px rgba(107, 52, 16, 0.12); }
+  50%      { box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 50%, transparent), 0 10px 30px rgba(107, 52, 16, 0.18); }
+}
+
+.tap-word {
+  cursor: pointer;
+  border-bottom: 1px dotted transparent;
+  transition: background 0.15s ease;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+.tap-word:hover,
+.tap-word:focus-visible {
+  background: rgba(184, 148, 74, 0.18);
+  border-bottom-color: var(--muted);
+  outline: none;
+}
+
+.search-hit {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  border-radius: 3px;
+  padding: 0 1px;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.search-hit.tap-word:hover {
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* Safe area padding for notched devices */
+.safe-top {
+  padding-top: max(env(safe-area-inset-top), 0px);
+}
+.safe-bottom {
+  padding-bottom: max(env(safe-area-inset-bottom), 0px);
+}
+
+/*
+ * Font size steps. Capped on narrow viewports so a single long samasta-pada
+ * can still fit a few per line on a phone. On wider screens we allow the
+ * bigger steps.
+ */
+.reader-root {
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+[data-fontsize='sm'] .reader-root {
+  font-size: 1rem;
+}
+[data-fontsize='md'] .reader-root {
+  font-size: 1.125rem;
+}
+[data-fontsize='lg'] .reader-root {
+  font-size: 1.25rem;
+}
+[data-fontsize='xl'] .reader-root {
+  font-size: 1.375rem;
+}
+[data-fontsize='2xl'] .reader-root {
+  font-size: 1.5rem;
+}
+@media (min-width: 640px) {
+  [data-fontsize='lg'] .reader-root {
+    font-size: 1.3125rem;
+  }
+  [data-fontsize='xl'] .reader-root {
+    font-size: 1.5rem;
+  }
+  [data-fontsize='2xl'] .reader-root {
+    font-size: 1.75rem;
+  }
+}
+
+/* -------- meaning cards (English / Malayalam translations) -------- */
+
+.meaning-cards {
+  /* Subtle indent so the meaning sits visually under the mantra
+     without competing with the bhāṣya cards below. */
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.meaning-card {
+  background: color-mix(in srgb, var(--surface) 96%, var(--accent) 2%);
+  border-color: color-mix(in srgb, var(--rule) 70%, var(--accent) 30%);
+  font-size: 0.95em;
+  /* Soft accent stripe on the left so en/ml cards read as "translation rail" */
+  border-left-width: 3px;
+}
+
+.meaning-card .meaning-body {
+  font-family: ui-serif, Cambria, Georgia, 'Manjari', serif;
+  color: color-mix(in srgb, var(--ink) 92%, transparent);
+}
+
+/* Animate the card sliding in once the JSON resolves so the reader
+   doesn't see a layout flicker on long mantras. */
+@keyframes meaning-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.meaning-card {
+  animation: meaning-card-in 180ms ease-out;
+}

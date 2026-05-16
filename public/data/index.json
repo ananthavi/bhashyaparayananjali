@@ -1,0 +1,218 @@
+{
+  "generatedAt": "2026-05-07T04:43:50.335Z",
+  "sourceAttribution": {
+    "name": "Advaita Sharada — Dakshinamnaya Sri Sharada Peetham, Sringeri",
+    "url": "https://advaitasharada.sringeri.net/",
+    "note": "Sanskrit text of the bhashyas is drawn from the digital edition maintained by the Sringeri Sharada Peetham. This reader is an independent parayanam-focused interface over that public corpus; all credit for the editorial work belongs to Advaita Sharada."
+  },
+  "texts": [
+    {
+      "slug": "isha",
+      "titleSa": "ईशावास्योपनिषद्भाष्यम्",
+      "titleIast": "Īśāvāsyopaniṣad-bhāṣyam",
+      "titleEn": "Isha Upanishad Bhashya",
+      "group": "upanishad",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Isha/devanagari",
+      "counts": {
+        "chapters": 1,
+        "mantras": 18,
+        "intros": 2,
+        "words": 2317
+      },
+      "dataPath": "/data/bhashya/isha.json",
+      "sizeBytes": 57600
+    },
+    {
+      "slug": "kena-pada",
+      "titleSa": "केनोपनिषत्पदभाष्यम्",
+      "titleIast": "Kenopaniṣat-pada-bhāṣyam",
+      "titleEn": "Kena Upanishad Pada Bhashya",
+      "group": "upanishad",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Kena_pada/devanagari",
+      "counts": {
+        "chapters": 4,
+        "mantras": 35,
+        "intros": 1,
+        "words": 4847
+      },
+      "dataPath": "/data/bhashya/kena-pada.json",
+      "sizeBytes": 115648
+    },
+    {
+      "slug": "kena-vakya",
+      "titleSa": "केनोपनिषद्वाक्यभाष्यम्",
+      "titleIast": "Kenopaniṣad-vākya-bhāṣyam",
+      "titleEn": "Kena Upanishad Vakya Bhashya",
+      "group": "upanishad",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Kena_vakya/devanagari",
+      "counts": {
+        "chapters": 4,
+        "mantras": 35,
+        "intros": 2,
+        "words": 3935
+      },
+      "dataPath": "/data/bhashya/kena-vakya.json",
+      "sizeBytes": 102604
+    },
+    {
+      "slug": "katha",
+      "titleSa": "कठोपनिषद्भाष्यम्",
+      "titleIast": "Kaṭhopaniṣad-bhāṣyam",
+      "titleEn": "Katha Upanishad Bhashya",
+      "group": "upanishad",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Kathaka/devanagari",
+      "counts": {
+        "chapters": 6,
+        "mantras": 120,
+        "intros": 2,
+        "words": 9229
+      },
+      "dataPath": "/data/bhashya/katha.json",
+      "sizeBytes": 236116
+    },
+    {
+      "slug": "prashna",
+      "titleSa": "प्रश्नोपनिषद्भाष्यम्",
+      "titleIast": "Praśnopaniṣad-bhāṣyam",
+      "titleEn": "Prashna Upanishad Bhashya",
+      "group": "upanishad",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Prashna/devanagari",
+      "counts": {
+        "chapters": 6,
+        "mantras": 67,
+        "intros": 1,
+        "words": 6827
+      },
+      "dataPath": "/data/bhashya/prashna.json",
+      "sizeBytes": 171516
+    },
+    {
+      "slug": "mundaka",
+      "titleSa": "मुण्डकोपनिषद्भाष्यम्",
+      "titleIast": "Muṇḍakopaniṣad-bhāṣyam",
+      "titleEn": "Mundaka Upanishad Bhashya",
+      "group": "upanishad",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Mundaka/devanagari",
+      "counts": {
+        "chapters": 6,
+        "mantras": 65,
+        "intros": 3,
+        "words": 6583
+      },
+      "dataPath": "/data/bhashya/mundaka.json",
+      "sizeBytes": 173518
+    },
+    {
+      "slug": "mandukya",
+      "titleSa": "माण्डूक्योपनिषद्भाष्यम्",
+      "titleIast": "Māṇḍūkyopaniṣad-bhāṣyam",
+      "titleEn": "Mandukya Upanishad Bhashya",
+      "group": "upanishad",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Mandukya/devanagari",
+      "counts": {
+        "chapters": 4,
+        "mantras": 227,
+        "intros": 10,
+        "words": 15373
+      },
+      "dataPath": "/data/bhashya/mandukya.json",
+      "sizeBytes": 395018
+    },
+    {
+      "slug": "taittiriya",
+      "titleSa": "तैत्तिरीयोपनिषद्भाष्यम्",
+      "titleIast": "Taittirīyopaniṣad-bhāṣyam",
+      "titleEn": "Taittiriya Upanishad Bhashya",
+      "group": "upanishad",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Taitiriya/devanagari",
+      "counts": {
+        "chapters": 31,
+        "mantras": 53,
+        "intros": 1,
+        "words": 14227
+      },
+      "dataPath": "/data/bhashya/taittiriya.json",
+      "sizeBytes": 337062
+    },
+    {
+      "slug": "aitareya",
+      "titleSa": "ऐतरेयोपनिषद्भाष्यम्",
+      "titleIast": "Aitareyopaniṣad-bhāṣyam",
+      "titleEn": "Aitareya Upanishad Bhashya",
+      "group": "upanishad",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Aitareya/devanagari",
+      "counts": {
+        "chapters": 5,
+        "mantras": 33,
+        "intros": 3,
+        "words": 5372
+      },
+      "dataPath": "/data/bhashya/aitareya.json",
+      "sizeBytes": 134488
+    },
+    {
+      "slug": "chandogya",
+      "titleSa": "छान्दोग्योपनिषद्भाष्यम्",
+      "titleIast": "Chāndogyopaniṣad-bhāṣyam",
+      "titleEn": "Chandogya Upanishad Bhashya",
+      "group": "upanishad",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Chandogya/devanagari",
+      "counts": {
+        "chapters": 154,
+        "mantras": 629,
+        "intros": 29,
+        "words": 51335
+      },
+      "dataPath": "/data/bhashya/chandogya.json",
+      "sizeBytes": 1281480
+    },
+    {
+      "slug": "brihadaranyaka",
+      "titleSa": "बृहदारण्यकोपनिषद्भाष्यम्",
+      "titleIast": "Bṛhadāraṇyakopaniṣad-bhāṣyam",
+      "titleEn": "Brihadaranyaka Upanishad Bhashya",
+      "group": "upanishad",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Brha/devanagari",
+      "counts": {
+        "chapters": 47,
+        "mantras": 441,
+        "intros": 20,
+        "words": 86450
+      },
+      "dataPath": "/data/bhashya/brihadaranyaka.json",
+      "sizeBytes": 2121772
+    },
+    {
+      "slug": "gita",
+      "titleSa": "श्रीमद्भगवद्गीताभाष्यम्",
+      "titleIast": "Śrīmad-bhagavadgītā-bhāṣyam",
+      "titleEn": "Bhagavad Gita Bhashya",
+      "group": "gita",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/Gita/devanagari",
+      "counts": {
+        "chapters": 18,
+        "mantras": 700,
+        "intros": 2,
+        "words": 58652
+      },
+      "dataPath": "/data/bhashya/gita.json",
+      "sizeBytes": 1336440
+    },
+    {
+      "slug": "brahma-sutra",
+      "titleSa": "ब्रह्मसूत्रभाष्यम्",
+      "titleIast": "Brahmasūtra-bhāṣyam",
+      "titleEn": "Brahma Sutra Bhashya",
+      "group": "brahma-sutra",
+      "sourceUrl": "https://advaitasharada.sringeri.net/display/bhashya/BS/devanagari",
+      "counts": {
+        "chapters": 16,
+        "mantras": 555,
+        "intros": 15,
+        "words": 96614
+      },
+      "dataPath": "/data/bhashya/brahma-sutra.json",
+      "sizeBytes": 2372743
+    }
+  ]
+}

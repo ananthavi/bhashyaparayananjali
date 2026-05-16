@@ -1,0 +1,21 @@
+# Reviewer registry for the gold-corpus sign-off process.
+#
+# Every gold-corpus form references a reviewer by `id`. CI fails if a
+# form references an unknown reviewer or has no reviewer.
+#
+# Schema (per docs/authoritative-validation-plan.md §3.4):
+#   id              required, kebab-case, unique
+#   name            optional (we may omit identities at request)
+#   specialisation  one of: vyakarana | vedanta-advaita | bilingual-ml-en
+#   affiliation     free text (institution, lineage, …)
+#   active_since    ISO-8601 date
+#
+# The single placeholder below exists so the schema check has at least
+# one reviewer to validate against; real reviewer IDs land via PR
+# from the actual scholar onboarding process documented in §5.
+
+- id: rs-pending
+  name: TBD — placeholder for first form annotations
+  specialisation: vyakarana
+  affiliation: pending
+  active_since: 2026-05-03

@@ -1,0 +1,74 @@
+# Gold-corpus seed for the Bhagavad-gītā bhāṣya.
+#
+# Every entry below is `unverified: true` — the analyser's current
+# answer captured as a starting point, awaiting reviewer sign-off.
+# Once a vyākaraṇa reviewer confirms an entry, set `reviewer:` to
+# their registry ID, fill `reviewed_at:`, and remove `unverified:`.
+#
+# Per docs/authoritative-validation-plan.md §2, the target is ~200
+# forms here; this is a tiny seed to exercise the schema CI checks.
+
+- form: "धर्मक्षेत्रे"
+  source: "BG_C01_V01"
+  lemma: "धर्मक्षेत्र"
+  pos: noun
+  morph:
+    vibhakti: 7
+    vacana: eka
+    linga: n
+  notes: |
+    Locative singular. Compound: dharma + kṣetra (tatpuruṣa).
+  unverified: true
+
+- form: "कुरुक्षेत्रे"
+  source: "BG_C01_V01"
+  lemma: "कुरुक्षेत्र"
+  pos: noun
+  morph:
+    vibhakti: 7
+    vacana: eka
+    linga: n
+  notes: |
+    Locative singular. Compound: kuru + kṣetra (tatpuruṣa).
+  unverified: true
+
+- form: "समवेताः"
+  source: "BG_C01_V01"
+  lemma: "समवेत"
+  pos: adjective
+  morph:
+    vibhakti: 1
+    vacana: bahu
+    linga: m
+  notes: |
+    Past passive participle of sam-ave-i (samave-ta-).
+  unverified: true
+
+- form: "योत्स्यमानाः"
+  source: "BG_C01_V01"
+  lemma: "युध्"
+  pos: verb
+  morph:
+    lakara: lat-future-middle-participle
+    vacana: bahu
+    linga: m
+  notes: |
+    Future passive/middle participle ('about to fight'). The current
+    rule-based analyser does not derive participial stems from a verb
+    root — this is an expected-gap that the Pāṇinian engine
+    (docs/paninian-engine-plan.md) is intended to close.
+  expect_gap: true
+  unverified: true
+
+- form: "उवाच"
+  source: "BG_C01_V02"
+  lemma: "वच्"
+  pos: verb
+  morph:
+    lakara: lit
+    purusha: 3
+    vacana: eka
+  notes: |
+    Perfect 3sg of vac-. Resolved today via the manual pronoun /
+    irregular-verb table; ideally a Pāṇinian engine should derive it.
+  unverified: true

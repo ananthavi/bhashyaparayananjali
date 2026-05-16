@@ -1,0 +1,16 @@
+{
+  "sources": [
+    {
+      "id": "ai-draft-en",
+      "citation": "AI draft \u2014 requires authoritative sign-off.",
+      "license": "ai-draft",
+      "publishedAt": "2026-05-05T02:39:39.625Z"
+    },
+    {
+      "id": "ai-draft-ml",
+      "citation": "AI draft \u2014 requires authoritative sign-off.",
+      "license": "ai-draft",
+      "publishedAt": "2026-05-05T02:39:39.625Z"
+    }
+  ]
+}

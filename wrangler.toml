@@ -1,0 +1,19 @@
+# Cloudflare Pages config. To deploy:
+#
+#   1. Create a Cloudflare account (free), Workers & Pages → Pages →
+#      "Connect to Git" → choose this repo.
+#   2. Build settings:
+#        Framework preset: None
+#        Build command:    npm ci && npm run build
+#        Output directory: dist
+#        Environment variables: PUBLIC_BASE=/, NODE_VERSION=22
+#   3. Deploy. Custom domain + free HTTPS auto-provisioned.
+#
+# This file is consumed by the wrangler CLI for command-line deploys
+# (`npm i -g wrangler && wrangler pages deploy dist`).
+
+name = "parayananjali"
+compatibility_date = "2024-12-01"
+
+[env.production]
+  pages_build_output_dir = "dist"

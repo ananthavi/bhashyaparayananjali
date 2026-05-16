@@ -1,0 +1,45 @@
+[package]
+name = "panini-wasm"
+version = "0.1.0"
+edition = "2021"
+description = "WASM bindings over Vidyut for the bhāṣya-pārāyaṇa app"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+serde        = { version = "1", features = ["derive"] }
+serde_json   = "1"
+serde-wasm-bindgen = "0.6"
+console_error_panic_hook = { version = "0.1", optional = true }
+
+# Real Vidyut crates. vidyut-prakriya gives us forward Pāṇinian
+# derivation (subantas, tinantas, kṛdantas, taddhitāntas, strī-antas,
+# dhātu-derivations) and a sūtra trace for each step.
+# vidyut-lipi gives us script-conversion at the engine boundary
+# without going through indic-transliteration on the JS side.
+# Pinned to a tested commit on the upstream main branch; published
+# 0.2.0 has a serde-deserialize bug in its own wasm.rs that blocks
+# WASM builds. The git ref will be replaced by a published 0.3.x
+# once Ambuda cuts the next release.
+vidyut-prakriya = { git = "https://github.com/ambuda-org/vidyut", branch = "main" }
+vidyut-lipi     = { git = "https://github.com/ambuda-org/vidyut", branch = "main" }
+
+[features]
+default = ["debug"]
+debug = ["console_error_panic_hook"]
+
+[profile.release]
+opt-level = "s"
+lto = false
+codegen-units = 1
+
+[package.metadata.wasm-pack.profile.release]
+# binaryen isn't always available in offline build environments.
+# The .wasm without wasm-opt is ~2× larger but still acceptable;
+# the GitHub Actions build re-enables wasm-opt where binaryen is
+# pre-installed on the runner image.
+wasm-opt = false

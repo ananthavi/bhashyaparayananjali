@@ -1,0 +1,57 @@
+node_modules
+dist
+dist-ssr
+.vite
+.cache
+.DS_Store
+*.log
+.env
+.env.local
+coverage
+.tmp
+scripts/.cache
+
+# Android build output
+android/.gradle/
+android/app/build/
+android/build/
+android/app/release/
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+android/capacitor-cordova-android-plugins/
+android/local.properties
+android/keystore.properties
+*.jks
+*.keystore
+!/android/app/debug.keystore
+
+# Rust / WASM build output
+panini-wasm/target/
+panini-wasm/Cargo.lock
+public/data/panini/
+
+# Translation batch staging — agents read prepared batches and drop
+# results here. The fused output goes into data-source/meanings/.
+tmp/
+
+# GitHub Actions workflows — temporarily untracked because the PAT used
+# for the initial push lacked `workflow` scope. To re-add: remove these
+# two lines, then `git add .github/workflows/` and commit.
+.github/workflows/
+
+# iOS build output
+ios/App/build/
+ios/App/Pods/
+ios/App/Podfile.lock
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+ios/capacitor-cordova-ios-plugins/
+ios/DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.mobileprovision
+*.p12
+*.cer
+

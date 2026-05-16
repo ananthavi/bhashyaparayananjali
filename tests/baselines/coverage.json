@@ -1,0 +1,18 @@
+{
+  "note": "Baseline for tests/property/coverage-non-regression.test.ts. Regenerate via npm run dict:coverage and copy from scripts/.cache/coverage.json.",
+  "generatedAt": "2026-04-27T06:06:47.227Z",
+  "totalTokens": 306483,
+  "distinct": 102882,
+  "percentByDistinct": {
+    "direct": 5.68,
+    "inflection": 9.95,
+    "compound": 64.34,
+    "none": 20.03
+  },
+  "percentByOccurrence": {
+    "direct": 37.01,
+    "inflection": 13.86,
+    "compound": 33.02,
+    "none": 16.11
+  }
+}

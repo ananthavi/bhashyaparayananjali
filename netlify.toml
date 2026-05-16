@@ -1,0 +1,38 @@
+# Netlify config. Connect this repo to Netlify, leave the build settings
+# as auto-detected, and the deploy will use these values. Netlify's free
+# tier gives 100 GB bandwidth/month + free HTTPS + custom domain.
+#
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  command = "npm ci && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  PUBLIC_BASE = "/"
+
+# HashRouter means we don't strictly need a SPA fallback, but include
+# one for safety in case someone deep-links via the BrowserRouter route
+# pattern from the past.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Long-cache for hashed assets, short-cache for the entry HTML so
+# clients pick up new builds quickly.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
