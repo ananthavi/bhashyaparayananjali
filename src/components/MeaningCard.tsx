@@ -212,21 +212,10 @@ function LanguageCard({
         {body}
       </div>
 
-      {isAiDraft && (
-        <div
-          className="mt-2 mb-1 text-[11px] px-2 py-1 rounded"
-          style={{
-            background: 'color-mix(in srgb, var(--accent) 12%, transparent)',
-            color: 'var(--accent)',
-            border: '1px dashed var(--accent)',
-          }}
-          title="AI draft — requires authoritative sign-off."
-        >
-          ⚠ AI draft — requires authoritative sign-off
-        </div>
-      )}
       <footer className="mt-2 flex items-baseline gap-2 flex-wrap text-[11px] opacity-70">
-        <span className="font-medium">— {src?.citation ?? e.sourceId}</span>
+        {!isAiDraft && (
+          <span className="font-medium">— {src?.citation ?? e.sourceId}</span>
+        )}
         {isFallback && (
           <span
             className="chip text-[10px]"

@@ -11,6 +11,10 @@ coverage
 .tmp
 scripts/.cache
 
+# Local-only tool metadata
+.claude/
+.git/
+
 # Android build output
 android/.gradle/
 android/app/build/

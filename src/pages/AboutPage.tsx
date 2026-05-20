@@ -71,7 +71,7 @@ export function AboutPage(): JSX.Element {
             <img
               src={asset('images/advaita/mahasannidhanam.jpg')}
               alt="His Holiness Jagadguru Mahāsannidhānam"
-              className="rounded-md w-full h-auto"
+              className="rounded-md w-full h-40 object-cover object-top"
             />
             <figcaption className="mt-2 text-xs opacity-80">
               His Holiness Jagadguru Mahāsannidhānam
@@ -81,7 +81,7 @@ export function AboutPage(): JSX.Element {
             <img
               src={asset('images/advaita/sannidhanam.jpg')}
               alt="His Holiness Jagadguru Sannidhānam"
-              className="rounded-md w-full h-auto"
+              className="rounded-md w-full h-40 object-cover object-top"
             />
             <figcaption className="mt-2 text-xs opacity-80">
               His Holiness Jagadguru Sannidhānam

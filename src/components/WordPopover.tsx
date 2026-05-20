@@ -112,6 +112,13 @@ export function WordPopover({
 
             {report.compounds.length > 0 && (
               <Section title="Compound (samāsa-vigraha)">
+                <div
+                  className="text-xs mb-2 italic opacity-80"
+                  style={{ color: 'var(--accent)' }}
+                >
+                  Experimental — splits are produced by an automated sandhi/compound
+                  analyzer and need manual verification before citation.
+                </div>
                 {report.compounds.map((step, i) => (
                   <CompoundRow
                     key={'c' + i}

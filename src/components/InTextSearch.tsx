@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import type { BhashyaChapter, BhashyaManifest } from '@/types';
 import { expandQueryToDevanagari } from '@/lib/search';
+import { normalize, asciiFold, isDevanagari } from '@/lib/search-normalize';
 import { transliterate, fontClassFor } from '@/lib/transliterate';
 import { usePrefs } from '@/state/store';
 
@@ -76,39 +77,71 @@ export function InTextSearch({
   //     any of its variants. This is robust to daṇḍas, commas, and
   //     sandhi-merged compounds (the variant is still a substring of
   //     the merged token).
+  // Matching is dual-script:
+  //   - Each query token is normalized into both a Devanāgarī form (n.dev)
+  //     and an ASCII-IAST-fold form (n.ascii) via search-normalize.
+  //   - Each unit's text is checked in BOTH forms — Devanāgarī substring
+  //     for native input, ASCII-fold substring for Roman input. So
+  //     typing "atma" hits "आत्म" via the ascii index, and "tma" hits
+  //     "ātma" / "paramātman" anywhere inside the token (the substring
+  //     contract the corpus-wide search has).
+  //   - Multi-word queries require every token to hit; intra-doc AND.
   const hits = useMemo<Hit[]>(() => {
     const trimmed = query.trim();
     if (!trimmed) return [];
     const queryTokens = tokeniseSanskrit(trimmed);
     if (queryTokens.length === 0) return [];
-    const variants: string[][] = queryTokens.map((t) =>
-      expandQueryToDevanagari(t).filter(Boolean),
+
+    const tokenForms = queryTokens.map((t) => {
+      const n = normalize(t);
+      return {
+        raw: t,
+        dev: n.dev,
+        ascii: n.ascii,
+      };
+    });
+    const highlightDev = Array.from(
+      new Set(
+        tokenForms
+          .flatMap((f) => [f.dev, isDevanagari(f.raw) ? f.raw : ''])
+          .concat(expandQueryToDevanagari(trimmed))
+          .filter(Boolean),
+      ),
     );
-    const allVariants = Array.from(new Set(variants.flat().filter(Boolean)));
-    if (allVariants.length === 0) return [];
 
     const out: Hit[] = [];
     for (const ch of loadedChapters) {
       for (const u of ch.units) {
         const haystack = u.root + ' ' + u.blocks.map((b) => b.text).join(' ');
-        const corpusTokens = tokeniseSanskrit(haystack);
-        // Every query token's variants must hit some corpus token.
-        const allHit = variants.every((vs) =>
-          vs.some((v) => corpusTokens.some((ct) => ct.includes(v))),
-        );
+        const haystackAscii = asciiFold(haystack);
+        const allHit = tokenForms.every((f) => {
+          const devHit = f.dev && haystack.includes(f.dev);
+          const asciiHit = f.ascii && haystackAscii.includes(f.ascii);
+          return Boolean(devHit || asciiHit);
+        });
         if (!allHit) continue;
-        // Locate a matching variant in the raw haystack so the snippet
-        // has surrounding context. If no variant matches as a raw
-        // substring (e.g., it only matched after splitting on a daṇḍa)
-        // we anchor at the start of the unit.
-        let idx = 0;
-        for (const v of allVariants) {
-          const i = haystack.indexOf(v);
-          if (i >= 0) {
-            idx = i;
-            break;
+        // Anchor the snippet at the first Devanāgarī match if any,
+        // otherwise the first ASCII match (mapped back to Devanāgarī
+        // by character index since asciiFold preserves positions for
+        // single-codepoint substitutions).
+        let idx = -1;
+        for (const f of tokenForms) {
+          if (f.dev) {
+            const i = haystack.indexOf(f.dev);
+            if (i >= 0) {
+              idx = i;
+              break;
+            }
+          }
+          if (f.ascii) {
+            const i = haystackAscii.indexOf(f.ascii);
+            if (i >= 0) {
+              idx = i;
+              break;
+            }
           }
         }
+        if (idx < 0) idx = 0;
         const start = Math.max(0, idx - 30);
         const end = Math.min(haystack.length, idx + 110);
         const snippet =
@@ -120,7 +153,7 @@ export function InTextSearch({
           chapterId: ch.id,
           ref: refLabel(manifest, u.id),
           snippet,
-          tokens: allVariants,
+          tokens: highlightDev,
         });
         if (out.length >= 100) return out;
       }

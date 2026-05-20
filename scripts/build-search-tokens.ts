@@ -1,27 +1,32 @@
 /**
- * Build a corpus-token index for the search autocomplete.
+ * Build the corpus token list that backs autocomplete.
  *
- * Walks every Devanāgarī token in every bhāṣya, counts frequencies,
- * and emits the top-N tokens sorted alphabetically. The runtime
- * autocomplete uses binary search (O(log n)) over this list to suggest
- * completions as the user types.
+ * Each entry carries the Devanāgarī token, its IAST-ascii fold (via
+ * `src/lib/search-normalize.ts`), and the frequency. Autocomplete at
+ * runtime feeds both forms into the matcher so the user can type a
+ * prefix, infix, or suffix of either form ("tma" → "ātma",
+ * "paramātman", "pratyagātmā").
  *
  * Output: public/data/search/tokens.json
- *   { generatedAt, total, entries: [[devanagari, freq], …] }
+ *   { generatedAt, total, distinct, entries: [[dev, ascii, freq], …] }
  */
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { normalize } from '../src/lib/search-normalize';
 
 const BHASHYA_DIR = path.join(process.cwd(), 'public', 'data', 'bhashya');
 const OUT = path.join(process.cwd(), 'public', 'data', 'search', 'tokens.json');
-const TOKEN_RE = /[ऀ-ॣॲ-ॿ]+/g;
-
-/** Drop tokens that are likely noise: too short, all digits, all marks. */
+// All Devanāgarī block codepoints (independent + dependent + nukta).
+const TOKEN_RE = /[ऀ-ॿ]+/g;
+// Independent vowels & consonants (U+0904–U+0939), nukta-set
+// (U+0958–U+095F), vocalic ṛ/ḷ (U+0960–U+0961). Written as Unicode
+// escapes so the TS compiler doesn't trip on canonical-equivalence
+// inside the literal character class.
 const LETTER_RE = /[ऄ-हक़-य़ॠ-ॡ]/;
+
 function isUseful(tok: string): boolean {
   if (tok.length < 2) return false;
-  // Must contain at least one independent letter (consonant or vowel).
   return LETTER_RE.test(tok);
 }
 
@@ -33,7 +38,7 @@ async function main(): Promise<void> {
     const slug = f.replace(/\.json$/, '');
     const manifestRaw = await fs.readFile(path.join(BHASHYA_DIR, f), 'utf8');
     const manifest = JSON.parse(manifestRaw) as { chapters: Array<{ id: string }> };
-    if (!manifest.chapters) continue; // not a manifest
+    if (!manifest.chapters) continue;
     for (const stub of manifest.chapters) {
       const chunkPath = path.join(BHASHYA_DIR, slug, stub.id + '.json');
       let raw: string;
@@ -42,23 +47,22 @@ async function main(): Promise<void> {
       } catch {
         continue;
       }
-      // Token-extract directly from the raw JSON string — saves parsing.
       const matches = raw.match(TOKEN_RE) ?? [];
       for (const m of matches) {
         if (!isUseful(m)) continue;
         counts.set(m, (counts.get(m) ?? 0) + 1);
       }
     }
+    // Touch slug so unused-var lint stays quiet.
+    void slug;
   }
 
-  // Keep tokens with frequency >= 2 to drop hapax-legomena noise; this
-  // halves the file without losing anything useful for autocomplete.
-  // Sort by Devanāgarī (UTF-16) order so the runtime can binary-search.
-  const entries: Array<[string, number]> = [...counts.entries()]
+  const entries: Array<[string, string, number]> = [...counts.entries()]
     .filter(([, n]) => n >= 2)
+    .map(([dev, n]) => [dev, normalize(dev).ascii, n] as [string, string, number])
     .sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
 
-  const total = entries.reduce((s, [, n]) => s + n, 0);
+  const total = entries.reduce((s, [, , n]) => s + n, 0);
   await fs.mkdir(path.dirname(OUT), { recursive: true });
   const json = JSON.stringify({
     generatedAt: new Date().toISOString(),
